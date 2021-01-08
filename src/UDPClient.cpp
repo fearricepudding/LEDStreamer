@@ -10,6 +10,7 @@
 #include "UDPClient.h"
 #include <iostream>
 
+int nopackets = 0;
 
 UdpClient::UdpClient(){};
 UdpClient::~UdpClient(){
@@ -49,6 +50,7 @@ void UdpClient::send(char *message){
 			buffer[n] = '\0'; 
 			//std::cout << "Response: " << buffer << std::endl;
 		
+			std::cout << nopackets << " " << std::flush;
 		if(l == 0){
 			std::cout << "-\r" << std::flush;
 		}else if(l == 1){
@@ -62,4 +64,5 @@ void UdpClient::send(char *message){
 			l = 0;
 		}
 		l++;
+		nopackets++;
 }

@@ -51,14 +51,67 @@ int main(int argc, char *argv[]){
 	UdpClient *udp = new UdpClient();
 	udp->open();
 	
+	/*
+
+	Theater chase
 	
-	
+	// Create our pattern
+	std::stringstream payload;
+	payload << "0D";
+	std::stringstream hex;
+	int flipper = 0;
+	for(int i = 0; i < 191; i++){
+		if(flipper <= 15){
+			hex << "FFFFFF";
+		}else if( flipper <= 27){
+			hex << "FF0000";
+		}else{
+			hex << "FFFFFF";
+			flipper = 0; 
+		}
+		flipper++;
+	}
+	payload << hex.str();
+	std::string pack = payload.str();		
+	char *cstr = new char[pack.length() + 1];
+	strcpy(cstr, pack.c_str());
+	udp->send(cstr);
+
+	std::string currentHex;
+	currentHex = hex.str();
+
 	while(true){
-	uint16_t i, j;
+
+		int current = 191/6;
+		std::stringstream payload;
+		payload << "0D";
+		std::stringstream newHex;
+		std::string oldHex = currentHex;
+		std::string tomove = oldHex.substr(0, 6);
+		oldHex.erase(0, 6);
+		newHex << oldHex;
+		newHex << tomove;
+		payload << newHex.str();
+		std::string pack = payload.str();		
+		char *cstr = new char[pack.length() + 1];
+		strcpy(cstr, pack.c_str());
+		udp->send(cstr);
+		currentHex = newHex.str();
+
+		//usleep(90000);
+	}
+
+	*/
+
+
+
+	// RAINBOW CYCLE
+	while(true){
+		uint16_t i, j;
 		for(j=0; j<256; j++) { //256
 		std::stringstream payload;
 		payload << "0D"; // Add the command first
-		
+
 		    for(i=0; i<191; i++) {
 		        RGB newCol = wheel(((i * 256 / 191) + j) & 255);
 		        std::string hex = rgb2hex(newCol.r, newCol.g, newCol.b);
@@ -69,8 +122,12 @@ int main(int argc, char *argv[]){
 			char *cstr = new char[pack.length() + 1];
 			strcpy(cstr, pack.c_str());
 			udp->send(cstr);
-			usleep(90000);
+			//
 		}
-		
 	}
+
+	return 0;
 }
+
+
+
